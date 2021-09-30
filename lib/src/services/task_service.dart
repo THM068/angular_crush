@@ -1,19 +1,39 @@
 import 'dart:async';
 
-import 'package:angular/angular.dart';
-import 'package:angular_crush/src/mocks/mock_tasks.dart';
 import 'package:angular_crush/src/model/task.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:dio/dio.dart';
 
-class TaskService implements OnInit {
-  var _controller =  StreamController<List<Task>>.broadcast();
 
-  Stream<List<Task>> getTasks()  async* {
-    yield mockTasks;
+class TaskService  {
+  final String _apiUrl = "http://localhost:3000/tasks";
+  Dio _dio;
+
+  TaskService(this._dio);
+
+  Future<List<Task>> getTasks()  async {
+    Response<List<dynamic>> response = await _dio.get(_apiUrl);
+    if(response.statusCode == 200) {
+      var data = response.data;
+      if(data == null) {
+        return [];
+      }
+      return data.map((e) =>
+           Task.fromJson(e)
+      ).toList();
+    }
+    return [];
   }
 
-  @override
-  void ngOnInit() {
-    _controller.add(mockTasks);
+  Future<Task> deleteTask(Task task) async {
+    String path = "${_apiUrl}/${task.id}";
+    Response response = await _dio.delete(path);
+    var data = response.data;
+
+    if(response.statusCode == 200) {
+      return task;
+    }
+    throw Exception("Task does not exist");
+
   }
+
 }

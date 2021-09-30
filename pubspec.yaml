@@ -10,6 +10,8 @@ dependencies:
   intl: ^0.17.0
   font_awesome: ^5.10.1
   rxdart: ^0.27.2
+  dio: ^4.0.0
+  stream_transform: ^2.0.0
 
 dev_dependencies:
   angular_test: ^4.0.0

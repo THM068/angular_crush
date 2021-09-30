@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:angular/angular.dart';
 import 'package:angular_crush/src/model/task.dart';
 
@@ -9,6 +11,18 @@ import 'package:angular_crush/src/model/task.dart';
 )
 class TaskItemComponent {
   Map<String, String> currentStyles = <String, String>{ 'color': 'red'};
+
   @Input()
   late Task task;
+
+  final _onDeleteTaskRequest =  StreamController<Task>();
+
+  @Output()
+  Stream<Task> get onDeleteTask => _onDeleteTaskRequest.stream;
+
+
+
+  void onDelete(Task task) {
+    _onDeleteTaskRequest.add(task);
+  }
 }
