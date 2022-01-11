@@ -30,5 +30,9 @@ class TasksComponent implements OnInit {
     });
   }
 
+  void toggleReminder(Task task) {
+    task.reminder = !task.reminder;
+  }
+
 
 }
